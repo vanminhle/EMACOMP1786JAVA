@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">COMP1786_LEBINHMINH</string>
     <string name="done">Done</string>
-    <string name="trip_name">Trip Name</string>
-    <string name="destination">Destination</string>
-    <string name="vehicle">Vehicle</string>
-    <string name="date_of_the_trip">Date of the trip</string>
-    <string name="description">Description</string>
-    <string name="dropdown_select_risk_assessment">Require Risks Assessment?</string>
-    <string name="dropdown_select_status">Status</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="trip_name">Trip Name <font color='red'>*</font></string>
+    <string name="destination">Destination <font color='red'>*</font></string>
+    <string name="vehicle">Vehicle <font color='red'>*</font></string>
+    <string name="date_of_the_trip">Date of the trip <font color='red'>*</font></string>
+    <string name="description">Description </string>
+    <string name="dropdown_select_risk_assessment">Require Risks Assessment? <font color='red'>*</font></string>
+    <string name="dropdown_select_status">Status <font color='red'>*</font></string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.fragment.app.DialogFragment;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.time.LocalDate;
 
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         statusValue.setAdapter(adapterItems);
     }
 
+
     //date time picker
     public void showDatePickerDialog(View v){
         DialogFragment newFragment = new DatePickerFragment();
@@ -56,24 +59,51 @@ public class MainActivity extends AppCompatActivity {
         EditText tripName = findViewById(R.id.input_trip_name);
         EditText tripDestination = findViewById(R.id.input_destination);
         EditText tripVehicle = findViewById(R.id.input_vehicle);
-        riskAssessmentValue = findViewById(R.id.dropdown_select_risk_assessment);
         EditText tripDescription = findViewById(R.id.input_description);
-        statusValue = findViewById(R.id.dropdown_select_status);
         EditText tripDate = findViewById(R.id.input_date_of_the_trip);
 
-        String strTripName = tripName.getText().toString();
-        String strTripDestination = tripDestination.getText().toString();
-        String strTripVehicle = tripVehicle.getText().toString();
-        String strRiskAssessment = riskAssessmentValue.getText().toString();
-        String strTripDescription = tripDescription.getText().toString();
-        String strStatus = statusValue.getText().toString();
-        String strDateOfTrip = tripDate.getText().toString();
+        String strTripName = tripName.getText().toString().trim();
+        String strTripDestination = tripDestination.getText().toString().trim();
+        String strTripVehicle = tripVehicle.getText().toString().trim();
+        String strRiskAssessment = riskAssessmentValue.getText().toString().trim();
+        String strTripDescription = tripDescription.getText().toString().trim();
+        String strStatus = statusValue.getText().toString().trim();
+        String strDateOfTrip = tripDate.getText().toString().trim();
 
-        displayNextAlert(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,strTripDescription,strStatus, strDateOfTrip);
+
+        fieldValidationCheck(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,strTripDescription,strStatus, strDateOfTrip);
     }
 
-    private void displayNextAlert(String strTripName, String strTripDestination, String strTripVehicle, String strRiskAssessment,
-                                  String strTripDescription, String strStatus, String strDateOfTrip ){
+    //display form submit
+    private void fieldValidationCheck(String strTripName, String strTripDestination, String strTripVehicle, String strRiskAssessment,
+                                  String strTripDescription, String strStatus, String strDateOfTrip){
+        if(TextUtils.isEmpty(strTripName) | TextUtils.isEmpty(strTripDestination)  | TextUtils.isEmpty(strTripVehicle) | TextUtils.isEmpty(strRiskAssessment)
+                | TextUtils.isEmpty(strDateOfTrip)  | TextUtils.isEmpty(strStatus) ){
+            Toast.makeText(this, "You must entered all required field!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(strTripName.length() > 40) {
+            Toast.makeText(this, "Name must lower than 40 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(strTripDestination.length() > 40){
+            Toast.makeText(this, "Destination must lower than 40 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(strTripVehicle.length() > 40) {
+            Toast.makeText(this, "Destination must lower than 40 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(strTripDescription.length() > 270) {
+            Toast.makeText(this, "Description must lower than 270 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        displaySubmitForm(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,strTripDescription,strStatus, strDateOfTrip);
+    }
+
+    private void displaySubmitForm(String strTripName, String strTripDestination, String strTripVehicle, String strRiskAssessment,
+                                   String strTripDescription, String strStatus, String strDateOfTrip){
         new AlertDialog.Builder(this).setTitle("Details entered").setMessage("Details entered: " +
                 "\n" + strTripName +
                 "\n" + strTripDestination +
