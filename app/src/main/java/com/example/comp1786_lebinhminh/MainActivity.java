@@ -71,14 +71,17 @@ public class MainActivity extends AppCompatActivity {
         String strDateOfTrip = tripDate.getText().toString().trim();
 
 
-        fieldValidationCheck(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,strTripDescription,strStatus, strDateOfTrip);
+        fieldValidationCheck(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,
+                strTripDescription, strStatus, strDateOfTrip);
     }
 
     //display form submit
-    private void fieldValidationCheck(String strTripName, String strTripDestination, String strTripVehicle, String strRiskAssessment,
-                                  String strTripDescription, String strStatus, String strDateOfTrip){
-        if(TextUtils.isEmpty(strTripName) | TextUtils.isEmpty(strTripDestination)  | TextUtils.isEmpty(strTripVehicle) | TextUtils.isEmpty(strRiskAssessment)
-                | TextUtils.isEmpty(strDateOfTrip)  | TextUtils.isEmpty(strStatus) ){
+    private void fieldValidationCheck(String strTripName, String strTripDestination, String strTripVehicle,
+                                      String strRiskAssessment, String strTripDescription, String strStatus,
+                                      String strDateOfTrip){
+        if(TextUtils.isEmpty(strTripName) | TextUtils.isEmpty(strTripDestination) |
+                TextUtils.isEmpty(strTripVehicle) | TextUtils.isEmpty(strRiskAssessment) |
+                TextUtils.isEmpty(strDateOfTrip)  | TextUtils.isEmpty(strStatus) ){
             Toast.makeText(this, "You must entered all required field!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -99,11 +102,18 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        displaySubmitForm(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,strTripDescription,strStatus, strDateOfTrip);
+        displaySubmitForm(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,
+                strTripDescription,strStatus, strDateOfTrip);
     }
 
-    private void displaySubmitForm(String strTripName, String strTripDestination, String strTripVehicle, String strRiskAssessment,
+    private void displaySubmitForm(String strTripName, String strTripDestination, String strTripVehicle,
+                                   String strRiskAssessment,
                                    String strTripDescription, String strStatus, String strDateOfTrip){
+
+        TripsDatabaseHelper db = new TripsDatabaseHelper(this);
+        db.insertTrip(strTripName, strTripDestination, strTripVehicle, strRiskAssessment, strDateOfTrip,
+                strTripDescription, strStatus);
+
         new AlertDialog.Builder(this).setTitle("Details entered").setMessage("Details entered: " +
                 "\n" + strTripName +
                 "\n" + strTripDestination +
