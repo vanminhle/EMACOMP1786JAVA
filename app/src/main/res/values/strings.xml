@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">COMP1786_LEBINHMINH</string>
+    <string name="app_name">Expense Management</string>
+    <string name="add">Add New Trips</string>
     <string name="done">Done</string>
+    <string name="delete_all">Delete All Trips</string>
+    <string name="delete_trip">Delete Trip</string>
+    <string name="upload">Upload</string>
+
+    <string name="no_trips">You have no trip. Please create a new one</string>
+
     <string name="trip_name">Trip Name <font color='red'>*</font></string>
     <string name="destination">Destination <font color='red'>*</font></string>
     <string name="vehicle">Vehicle <font color='red'>*</font></string>

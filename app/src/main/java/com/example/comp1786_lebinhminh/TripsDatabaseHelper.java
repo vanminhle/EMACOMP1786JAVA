@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class TripsDatabaseHelper extends SQLiteOpenHelper {
     private final SQLiteDatabase database;
 
@@ -71,33 +73,59 @@ public class TripsDatabaseHelper extends SQLiteOpenHelper {
         database.insertOrThrow(TABLE_NAME, null, rowValues);
     }
 
-    public String getTrips(){
+    public ArrayList<Trip> getTrips(){
         Cursor results = database.query(TABLE_NAME,
                 new String[]{ID_COLUMN, NAME_COLUMN, DESTINATION_COLUMN, VEHICLE_COLUMN, ISASSESSMENT_COLUMN,
                         DATEOFTRIP_COLUMN, DESTINATION_COLUMN, STATUS_COLUMN,
                 },
                 null, null, null, null, NAME_COLUMN
         );
-        StringBuilder resultText = new StringBuilder();
+
+        ArrayList<Trip> trip_list = new ArrayList<>();
 
         results.moveToFirst();
         while(!results.isAfterLast()){
-            int id = results.getInt(0);
-            String name = results.getString(1);
-            String destination = results.getString(2);
+            String id = results.getString(0);
+            String tripName = results.getString(1);
+            String tripDestination = results.getString(2);
             String vehicle = results.getString(3);
             String requireAssessment = results.getString(4);
             String dateOfTrip = results.getString(5);
             String description = results.getString(6);
             String status = results.getString(7);
 
-            resultText.append(id).append(" ").append(name).append(" ").append(destination).append(" ").
-                    append(vehicle).append(" ").append(requireAssessment).append(" ").append(dateOfTrip)
-                    .append(" ").append(description).append(" ").append(status).append("\n");
+            trip_list.add(new Trip(id, tripName, tripDestination, vehicle, requireAssessment,
+                    dateOfTrip, description, status));
+
             results.moveToNext();
         }
         results.close();
-        return resultText.toString();
+        return trip_list;
+    }
+
+    public Cursor getTripId(String id) {
+        return this.getWritableDatabase().query(TABLE_NAME,null,"id=?",
+                new String[]{String.valueOf(id)},null,null,null);
+    }
+
+    public void updateTrip(String id, String strTripName, String strTripDestination, String strTripVehicle,
+                           String strRiskAssessment, String strDateOfTrip, String strTripDescription,
+                           String strStatus) {
+        ContentValues rowValues = new ContentValues();
+
+        rowValues.put(NAME_COLUMN, strTripName);
+        rowValues.put(DESTINATION_COLUMN, strTripDestination);
+        rowValues.put(VEHICLE_COLUMN, strTripVehicle);
+        rowValues.put(ISASSESSMENT_COLUMN, strRiskAssessment);
+        rowValues.put(DATEOFTRIP_COLUMN, strDateOfTrip);
+        rowValues.put(DESCRIPTION_COLUMN, strTripDescription);
+        rowValues.put(STATUS_COLUMN, strStatus);
+
+        database.update(TABLE_NAME, rowValues, "id = ?", new String[]{String.valueOf(id)});
+    }
+
+    public void deleteAllTrips(){
+        database.delete("trips", null, null);
     }
 }
 
