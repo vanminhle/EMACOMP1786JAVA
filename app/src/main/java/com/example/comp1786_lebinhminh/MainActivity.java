@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +12,12 @@ import android.widget.ListView;
 
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.comp1786_lebinhminh.activity.AddTripActivity;
+import com.example.comp1786_lebinhminh.activity.EditTripActivity;
+import com.example.comp1786_lebinhminh.adapter.TripAdapter;
+import com.example.comp1786_lebinhminh.database.TripsDatabaseHelper;
+import com.example.comp1786_lebinhminh.model.Trip;
 
 import java.util.ArrayList;
 

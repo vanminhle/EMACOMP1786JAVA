@@ -1,4 +1,4 @@
-package com.example.comp1786_lebinhminh;
+package com.example.comp1786_lebinhminh.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.example.comp1786_lebinhminh.model.Trip;
 
 import java.util.ArrayList;
 
@@ -122,6 +124,10 @@ public class TripsDatabaseHelper extends SQLiteOpenHelper {
         rowValues.put(STATUS_COLUMN, strStatus);
 
         database.update(TABLE_NAME, rowValues, "id = ?", new String[]{String.valueOf(id)});
+    }
+
+    public void deleteTrip(String id){
+        database.delete(TABLE_NAME,  " id = ?", new String[]{String.valueOf(id)});
     }
 
     public void deleteAllTrips(){

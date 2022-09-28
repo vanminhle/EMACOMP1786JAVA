@@ -15,4 +15,7 @@
     <string name="description">Description </string>
     <string name="dropdown_select_risk_assessment">Require Risks Assessment? <font color='red'>*</font></string>
     <string name="dropdown_select_status">Status <font color='red'>*</font></string>
+
+    <string name="trip_expenses">Trip Expenses<font color='red'>*</font></string>
+
 </resources>

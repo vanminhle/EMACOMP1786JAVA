@@ -1,4 +1,4 @@
-package com.example.comp1786_lebinhminh;
+package com.example.comp1786_lebinhminh.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -8,6 +8,8 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.comp1786_lebinhminh.activity.EditTripActivity;
 
 import java.time.LocalDate;
 

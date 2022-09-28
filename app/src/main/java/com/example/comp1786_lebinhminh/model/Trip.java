@@ -1,4 +1,4 @@
-package com.example.comp1786_lebinhminh;
+package com.example.comp1786_lebinhminh.model;
 
 public class Trip {
     String id;

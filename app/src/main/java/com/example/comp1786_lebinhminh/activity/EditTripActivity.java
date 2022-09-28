@@ -1,10 +1,11 @@
-package com.example.comp1786_lebinhminh;
+package com.example.comp1786_lebinhminh.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -16,9 +17,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.comp1786_lebinhminh.MainActivity;
+import com.example.comp1786_lebinhminh.R;
+import com.example.comp1786_lebinhminh.database.TripsDatabaseHelper;
+import com.example.comp1786_lebinhminh.fragment.DatePickerFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.time.LocalDate;
 
-public class AddTripActivity extends AppCompatActivity {
+public class EditTripActivity extends AppCompatActivity {
     String[] risk_assessment = {"No", "Yes"};
     String[] status = {"Initial", "Pending", "Done"};
 
@@ -26,10 +33,13 @@ public class AddTripActivity extends AppCompatActivity {
     AutoCompleteTextView statusValue;
     ArrayAdapter<String> adapterItems;
 
+    TripsDatabaseHelper tripDb;
+    String currentTripId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_trip);
+        setContentView(R.layout.activity_edit_trip);
 
         riskAssessmentValue = findViewById(R.id.dropdown_select_risk_assessment);
         adapterItems = new ArrayAdapter<>(this,R.layout.assessment_list_item, risk_assessment);
@@ -38,6 +48,14 @@ public class AddTripActivity extends AppCompatActivity {
         statusValue = findViewById(R.id.dropdown_select_status);
         adapterItems = new ArrayAdapter<>(this,R.layout.status_list_item, status);
         statusValue.setAdapter(adapterItems);
+
+        tripDb = new TripsDatabaseHelper(this);
+        currentTripId = this.getIntent().getStringExtra("tripId");
+        setInputs();
+
+        FloatingActionButton floatingTripExpensesButton = findViewById(R.id.trip_expenses);
+        floatingTripExpensesButton.setOnClickListener(view ->
+                Toast.makeText(EditTripActivity.this, "CLICKED", Toast.LENGTH_SHORT).show());
     }
 
     //date time picker
@@ -46,9 +64,30 @@ public class AddTripActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
-    public void updateDate(LocalDate dob){
+    public void updateDate(LocalDate date){
         TextView dobText = findViewById(R.id.input_date_of_the_trip);
-        dobText.setText(dob.toString());
+        dobText.setText(date.toString());
+    }
+
+    //set inputs
+    private void setInputs(){
+        EditText tripName = findViewById(R.id.input_trip_name);
+        EditText tripDestination = findViewById(R.id.input_destination);
+        EditText tripVehicle = findViewById(R.id.input_vehicle);
+        EditText tripDescription = findViewById(R.id.input_description);
+        EditText tripDate = findViewById(R.id.input_date_of_the_trip);
+
+        Cursor cursor = tripDb.getTripId(currentTripId);
+        if (cursor.moveToFirst()) {
+            tripName.setText(cursor.getString(1));
+            tripDestination.setText(cursor.getString(2));
+            tripVehicle.setText(cursor.getString(3));
+            riskAssessmentValue.setText(cursor.getString(4), false);
+            tripDate.setText(cursor.getString(5));
+            tripDescription.setText(cursor.getString(6));
+            statusValue.setText(cursor.getString(7), false);
+        }
+        cursor.close();
     }
 
     //get inputs
@@ -68,12 +107,12 @@ public class AddTripActivity extends AppCompatActivity {
         String strDateOfTrip = tripDate.getText().toString().trim();
 
 
-        fieldValidationCheck(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,
+        fieldValidationCheck(currentTripId, strTripName, strTripDestination, strTripVehicle, strRiskAssessment,
                 strTripDescription, strStatus, strDateOfTrip);
     }
 
     //display form submit
-    private void fieldValidationCheck(String strTripName, String strTripDestination, String strTripVehicle,
+    private void fieldValidationCheck(String id, String strTripName, String strTripDestination, String strTripVehicle,
                                       String strRiskAssessment, String strTripDescription, String strStatus,
                                       String strDateOfTrip){
         if(TextUtils.isEmpty(strTripName) | TextUtils.isEmpty(strTripDestination) |
@@ -99,29 +138,29 @@ public class AddTripActivity extends AppCompatActivity {
             return;
         }
 
-        displaySubmitForm(strTripName, strTripDestination, strTripVehicle, strRiskAssessment,
+        displaySubmitForm(id, strTripName, strTripDestination, strTripVehicle, strRiskAssessment,
                 strTripDescription,strStatus, strDateOfTrip);
     }
 
-    private void displaySubmitForm(String strTripName, String strTripDestination, String strTripVehicle,
+    private void displaySubmitForm(String id, String strTripName, String strTripDestination, String strTripVehicle,
                                    String strRiskAssessment,
                                    String strTripDescription, String strStatus, String strDateOfTrip){
 
         TripsDatabaseHelper db = new TripsDatabaseHelper(this);
-        db.insertTrip(strTripName, strTripDestination, strTripVehicle, strRiskAssessment, strDateOfTrip,
+        db.updateTrip(id, strTripName, strTripDestination, strTripVehicle, strRiskAssessment, strDateOfTrip,
                 strTripDescription, strStatus);
 
         finish();
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 
-        Toast.makeText(this, "Added Trip Successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Edit Trip Successfully", Toast.LENGTH_SHORT).show();
     }
 
     //menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.create_top_menu, menu);
+        getMenuInflater().inflate(R.menu.edit_top_menu, menu);
         return true;
     }
 
@@ -130,6 +169,16 @@ public class AddTripActivity extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.item_done){
             getInputs();
+            return true;
+        }
+        if(id == R.id.item_delete){
+            tripDb.deleteTrip(currentTripId);
+
+            finish();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+
+            Toast.makeText(this, "Deleted Trip successfully", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);

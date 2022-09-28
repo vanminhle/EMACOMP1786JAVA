@@ -1,7 +1,6 @@
-package com.example.comp1786_lebinhminh;
+package com.example.comp1786_lebinhminh.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.comp1786_lebinhminh.R;
+import com.example.comp1786_lebinhminh.model.Trip;
 
 import java.util.ArrayList;
 import java.util.Objects;
