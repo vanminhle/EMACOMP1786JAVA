@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 import com.example.comp1786_lebinhminh.activity.AddTripActivity;
 import com.example.comp1786_lebinhminh.activity.EditTripActivity;
 import com.example.comp1786_lebinhminh.adapter.TripAdapter;
-import com.example.comp1786_lebinhminh.database.TripsDatabaseHelper;
 import com.example.comp1786_lebinhminh.model.Trip;
 
 import java.util.ArrayList;
@@ -30,9 +30,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TripsDatabaseHelper tripDb = new TripsDatabaseHelper(this);
-        ArrayList<Trip> trips = tripDb.getTrips();
-
+        AppDatabaseHelper appDb = new AppDatabaseHelper(this);
+        ArrayList<Trip> trips = appDb.getTrips();
         TripAdapter tripAdapter = new TripAdapter(this, R.layout.trips_list_row, trips);
 
         if(tripAdapter.getCount() != 0) {
@@ -57,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //restart activity
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
     //menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if(id == R.id.item_delete_all){
-            TripsDatabaseHelper tripDb = new TripsDatabaseHelper(this);
-            tripDb.deleteAllTrips();
+            AppDatabaseHelper appDb = new AppDatabaseHelper(this);
+            appDb.deleteAllTrips();
 
             finish();
             overridePendingTransition( 0, 0);

@@ -11,11 +11,18 @@
     <string name="trip_name">Trip Name <font color='red'>*</font></string>
     <string name="destination">Destination <font color='red'>*</font></string>
     <string name="vehicle">Vehicle <font color='red'>*</font></string>
-    <string name="date_of_the_trip">Date of the trip <font color='red'>*</font></string>
+    <string name="date_of_the_trip">Date of the Trip <font color='red'>*</font></string>
     <string name="description">Description </string>
     <string name="dropdown_select_risk_assessment">Require Risks Assessment? <font color='red'>*</font></string>
     <string name="dropdown_select_status">Status <font color='red'>*</font></string>
 
-    <string name="trip_expenses">Trip Expenses<font color='red'>*</font></string>
+    <string name="trip_expenses">Trip Expenses</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="type_expense">Type Expense <font color='red'>*</font></string>
+    <string name="amount">Amount <font color='red'>*</font></string>
+    <string name="time_of_the_expense">Time of the Expense <font color='red'>*</font></string>
+    <string name="comment">Comment</string>
+    <string name="no_expense">You have no expense. Please create a new one</string>
+
 
 </resources>

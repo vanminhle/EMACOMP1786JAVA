@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.example.comp1786_lebinhminh.MainActivity;
 import com.example.comp1786_lebinhminh.R;
-import com.example.comp1786_lebinhminh.database.TripsDatabaseHelper;
+import com.example.comp1786_lebinhminh.AppDatabaseHelper;
 import com.example.comp1786_lebinhminh.fragment.DatePickerFragment;
 
 import java.time.LocalDate;
@@ -52,9 +52,9 @@ public class AddTripActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
-    public void updateDate(LocalDate dob){
-        TextView dobText = findViewById(R.id.input_date_of_the_trip);
-        dobText.setText(dob.toString());
+    public void updateDate(LocalDate date){
+        TextView dateText = findViewById(R.id.input_date_of_the_trip);
+        dateText.setText(date.toString());
     }
 
     //get inputs
@@ -113,7 +113,7 @@ public class AddTripActivity extends AppCompatActivity {
                                    String strRiskAssessment,
                                    String strTripDescription, String strStatus, String strDateOfTrip){
 
-        TripsDatabaseHelper db = new TripsDatabaseHelper(this);
+        AppDatabaseHelper db = new AppDatabaseHelper(this);
         db.insertTrip(strTripName, strTripDestination, strTripVehicle, strRiskAssessment, strDateOfTrip,
                 strTripDescription, strStatus);
 
@@ -131,7 +131,6 @@ public class AddTripActivity extends AppCompatActivity {
             finish();
             startActivity(intent);
         }).show();
-
     }
 
     //menu

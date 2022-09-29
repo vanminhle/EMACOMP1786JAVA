@@ -19,8 +19,8 @@ import android.widget.Toast;
 
 import com.example.comp1786_lebinhminh.MainActivity;
 import com.example.comp1786_lebinhminh.R;
-import com.example.comp1786_lebinhminh.database.TripsDatabaseHelper;
-import com.example.comp1786_lebinhminh.fragment.DatePickerFragment;
+import com.example.comp1786_lebinhminh.AppDatabaseHelper;
+import com.example.comp1786_lebinhminh.fragment.DateEditFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -33,7 +33,7 @@ public class EditTripActivity extends AppCompatActivity {
     AutoCompleteTextView statusValue;
     ArrayAdapter<String> adapterItems;
 
-    TripsDatabaseHelper tripDb;
+    AppDatabaseHelper appDb;
     String currentTripId;
 
     @Override
@@ -49,24 +49,27 @@ public class EditTripActivity extends AppCompatActivity {
         adapterItems = new ArrayAdapter<>(this,R.layout.status_list_item, status);
         statusValue.setAdapter(adapterItems);
 
-        tripDb = new TripsDatabaseHelper(this);
+        appDb = new AppDatabaseHelper(this);
         currentTripId = this.getIntent().getStringExtra("tripId");
         setInputs();
 
         FloatingActionButton floatingTripExpensesButton = findViewById(R.id.trip_expenses);
-        floatingTripExpensesButton.setOnClickListener(view ->
-                Toast.makeText(EditTripActivity.this, "CLICKED", Toast.LENGTH_SHORT).show());
+        floatingTripExpensesButton.setOnClickListener(view -> {
+            Intent intent = new Intent(EditTripActivity.this, TripExpenseActivity.class);
+            intent.putExtra("tripId", currentTripId);
+            startActivity(intent);
+        });
     }
 
     //date time picker
     public void showDatePickerDialog(View v){
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = new DateEditFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void updateDate(LocalDate date){
-        TextView dobText = findViewById(R.id.input_date_of_the_trip);
-        dobText.setText(date.toString());
+        TextView dateText = findViewById(R.id.input_date_of_the_trip);
+        dateText.setText(date.toString());
     }
 
     //set inputs
@@ -77,7 +80,7 @@ public class EditTripActivity extends AppCompatActivity {
         EditText tripDescription = findViewById(R.id.input_description);
         EditText tripDate = findViewById(R.id.input_date_of_the_trip);
 
-        Cursor cursor = tripDb.getTripId(currentTripId);
+        Cursor cursor = appDb.getTripId(currentTripId);
         if (cursor.moveToFirst()) {
             tripName.setText(cursor.getString(1));
             tripDestination.setText(cursor.getString(2));
@@ -146,13 +149,11 @@ public class EditTripActivity extends AppCompatActivity {
                                    String strRiskAssessment,
                                    String strTripDescription, String strStatus, String strDateOfTrip){
 
-        TripsDatabaseHelper db = new TripsDatabaseHelper(this);
+        AppDatabaseHelper db = new AppDatabaseHelper(this);
         db.updateTrip(id, strTripName, strTripDestination, strTripVehicle, strRiskAssessment, strDateOfTrip,
                 strTripDescription, strStatus);
 
         finish();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
 
         Toast.makeText(this, "Edit Trip Successfully", Toast.LENGTH_SHORT).show();
     }
@@ -172,7 +173,7 @@ public class EditTripActivity extends AppCompatActivity {
             return true;
         }
         if(id == R.id.item_delete){
-            tripDb.deleteTrip(currentTripId);
+            appDb.deleteTrip(currentTripId);
 
             finish();
             Intent intent = new Intent(this, MainActivity.class);
