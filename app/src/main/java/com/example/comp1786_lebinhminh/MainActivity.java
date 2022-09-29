@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +15,10 @@ import android.widget.Toast;
 
 import com.example.comp1786_lebinhminh.activity.AddTripActivity;
 import com.example.comp1786_lebinhminh.activity.EditTripActivity;
+import com.example.comp1786_lebinhminh.activity.SearchTripActivity;
 import com.example.comp1786_lebinhminh.adapter.TripAdapter;
 import com.example.comp1786_lebinhminh.model.Trip;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         TripAdapter tripAdapter = new TripAdapter(this, R.layout.trips_list_row, trips);
 
         if(tripAdapter.getCount() != 0) {
-            listView = findViewById(R.id.listTrips);
+            listView = findViewById(R.id.list_trips);
             listView.setAdapter(tripAdapter);
 
             listView.setOnItemClickListener((adapterView, view, position, id) -> {
@@ -49,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
             TextView textNoTrips = findViewById(R.id.no_trips);
             textNoTrips.setVisibility(View.VISIBLE);
         }
+
+        FloatingActionButton floatingTripExpensesButton = findViewById(R.id.search_trip);
+        floatingTripExpensesButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, SearchTripActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void addNewTrip(){

@@ -24,5 +24,7 @@
     <string name="comment">Comment</string>
     <string name="no_expense">You have no expense. Please create a new one</string>
 
+    <string name="search_trip">Search</string>
+    <string name="search_trip_placeholder">Search by</string>
 
 </resources>

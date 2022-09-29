@@ -6,13 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import java.text.DecimalFormat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.comp1786_lebinhminh.R;
 import com.example.comp1786_lebinhminh.model.Expense;
-import com.example.comp1786_lebinhminh.model.Trip;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -20,6 +20,7 @@ import java.util.Objects;
 public class ExpenseAdapter extends ArrayAdapter<Expense> {
     private final Context mContext;
     private final int mResource;
+    DecimalFormat formatAmount = new DecimalFormat("###,###,###.00 $");
 
     public ExpenseAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Expense> objects){
         super(context, resource, objects);
@@ -42,7 +43,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
 
         expenseTypeText.setText(getItem(position).getExpenseType());
         timeExpenseText.setText(getItem(position).getTimeOfExpense());
-        amountExpenseText.setText(String.format("%s $", getItem(position).getAmount()));
+        amountExpenseText.setText(formatAmount.format(getItem(position).getAmount()));
         commentText.setText(getItem(position).getComment());
 
         return convertView;

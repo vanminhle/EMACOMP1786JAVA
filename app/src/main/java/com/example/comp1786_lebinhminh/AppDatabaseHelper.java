@@ -54,15 +54,16 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_EXPENSES_CREATE = String.format(
             "CREATE TABLE %s (" +
                     "%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "%s INTEGER, " +
+                    "%s INTEGER," +
                     "%s TEXT, " +
                     "%s INTEGER, " +
                     "%s TEXT, " +
-                    "%s TEXT)",
-            TABLE_EXPENSES, EXPENSE_ID_COLUMN, ID_OF_TRIP_COLUMN, EXPENSE_TYPE_COLUMN, AMOUNT_COLUMN,
-            TIME_OF_EXPENSE_COLUMN, COMMENT_COLUMN
+                    "%s TEXT, " +
+                    "FOREIGN KEY (%s) REFERENCES %s(%s))",
+            TABLE_EXPENSES, EXPENSE_ID_COLUMN, ID_OF_TRIP_COLUMN,
+            EXPENSE_TYPE_COLUMN, AMOUNT_COLUMN, TIME_OF_EXPENSE_COLUMN, COMMENT_COLUMN,
+            ID_OF_TRIP_COLUMN, TABLE_TRIPS, TRIP_ID_COLUMN
     );
-
 
     public AppDatabaseHelper(Context context){
         super(context, "ExpenseManagementDb", null, 1);
@@ -130,6 +131,37 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
         return trip_list;
     }
 
+    public ArrayList<Trip> searchTrip(String searchValue, String COLUMN){
+        Cursor results = database.query(TABLE_TRIPS,
+                new String[]{TRIP_ID_COLUMN, NAME_COLUMN, DESTINATION_COLUMN, VEHICLE_COLUMN, ISASSESSMENT_COLUMN,
+                        DATEOFTRIP_COLUMN, DESTINATION_COLUMN, STATUS_COLUMN,
+                },
+                COLUMN + " LIKE ?", new String[] { searchValue + "%" },
+                null, null, TRIP_ID_COLUMN + " DESC"
+        );
+
+        ArrayList<Trip> trip_list = new ArrayList<>();
+
+        results.moveToFirst();
+        while(!results.isAfterLast()){
+            String id = results.getString(0);
+            String tripName = results.getString(1);
+            String tripDestination = results.getString(2);
+            String vehicle = results.getString(3);
+            String requireAssessment = results.getString(4);
+            String dateOfTrip = results.getString(5);
+            String description = results.getString(6);
+            String status = results.getString(7);
+
+            trip_list.add(new Trip(id, tripName, tripDestination, vehicle, requireAssessment,
+                    dateOfTrip, description, status));
+
+            results.moveToNext();
+        }
+        results.close();
+        return trip_list;
+    }
+
     public Cursor getTripId(String id) {
         return this.getWritableDatabase().query(TABLE_TRIPS,null,"id=?",
                 new String[]{String.valueOf(id)},null,null,null);
@@ -157,7 +189,8 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void deleteAllTrips(){
-        database.delete("trips", null, null);
+        database.delete(TABLE_TRIPS, null, null);
+        database.delete(TABLE_EXPENSES, null, null);
     }
 
     //expenses

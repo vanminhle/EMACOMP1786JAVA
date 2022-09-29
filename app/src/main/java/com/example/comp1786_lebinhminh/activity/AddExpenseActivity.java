@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -70,17 +69,20 @@ public class AddExpenseActivity extends AppCompatActivity {
     private void fieldValidationCheck(String strTypeExpense, String numExpenseAmount, String strTimeOfExpense,
                                       String strComment){
         if(TextUtils.isEmpty(strTypeExpense) | TextUtils.isEmpty(numExpenseAmount) |
-                TextUtils.isEmpty(strTimeOfExpense) | TextUtils.isEmpty(strComment)){
+                TextUtils.isEmpty(strTimeOfExpense)){
             Toast.makeText(this, "You must entered all required field!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(numExpenseAmount.length() > 8) {
-            Toast.makeText(this, "Expense Amount must lower than 8 numbers", Toast.LENGTH_SHORT).show();
+        if(numExpenseAmount.length() > 9) {
+            Toast.makeText(this, "Expense Amount must lower than 9 numbers", Toast.LENGTH_SHORT).show();
             return;
         }
         if(strComment.length() > 150) {
             Toast.makeText(this, "Comment must lower than 150 characters", Toast.LENGTH_SHORT).show();
             return;
+        }
+        if(TextUtils.isEmpty(strComment)) {
+            strComment = "No Comment";
         }
         displaySubmitSuccess(strTypeExpense, numExpenseAmount, strTimeOfExpense, strComment);
     }

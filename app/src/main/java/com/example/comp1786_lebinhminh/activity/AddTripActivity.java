@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -17,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.comp1786_lebinhminh.MainActivity;
 import com.example.comp1786_lebinhminh.R;
 import com.example.comp1786_lebinhminh.AppDatabaseHelper;
 import com.example.comp1786_lebinhminh.fragment.DatePickerFragment;
@@ -117,8 +115,6 @@ public class AddTripActivity extends AppCompatActivity {
         db.insertTrip(strTripName, strTripDestination, strTripVehicle, strRiskAssessment, strDateOfTrip,
                 strTripDescription, strStatus);
 
-        Intent intent = new Intent(this, MainActivity.class);
-
         new AlertDialog.Builder(this).setTitle("Added Trip Successfully").setMessage(
                 "Trip Name : " + strTripName +
                 "\n" + "Trip Destination : " + strTripDestination +
@@ -127,10 +123,7 @@ public class AddTripActivity extends AppCompatActivity {
                 "\n" + "Date of Trip : " + strDateOfTrip +
                 "\n" + "Trip Description : " + strTripDescription +
                 "\n" + "Trip Status : " + strStatus
-        ).setNeutralButton("OK", (dialogInterface, i) -> {
-            finish();
-            startActivity(intent);
-        }).show();
+        ).setNeutralButton("OK", (dialogInterface, i) -> finish()).show();
     }
 
     //menu
